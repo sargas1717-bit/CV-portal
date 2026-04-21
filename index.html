@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio | José Gabriel Rojas Dagger</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #020617;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass:hover {
+            border-color: rgba(6, 182, 212, 0.3);
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        #adakademy-gallery {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #adakademy-gallery.open {
+            max-height: 2000px;
+        }
+
+        /* Custom underline for links */
+        .link-hover {
+            position: relative;
+        }
+        .link-hover::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #22d3ee;
+            transition: width 0.3s ease;
+        }
+        .link-hover:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-300 selection:bg-cyan-500/30">
+
+    <div id="root"></div>
+
+    <script>
+        const PORTFOLIO_DATA = {
+          personal: {
+            name: "José Gabriel Rojas Dagger",
+            roles: ["Ingeniero Electricista", "Desarrollador IoT e IA", "Especialista en Robótica Educativa"],
+            summary: "Ingeniero Electricista especializado en asesoría tecnológica, automatización de flujos, robótica educativa (STEAM) y desarrollo de soluciones con Inteligencia Artificial e IoT. Experiencia comprobada en el diseño de arquitecturas de software asistidas por IA y el mantenimiento de hardware para sistemas de misión crítica. Destaco por la capacidad de transformar conceptos técnicos complejos en soluciones creativas, pedagógicas y escalables, con un enfoque modular orientado a empoderar equipos de trabajo.",
+            phone: "+58 0412 8698715",
+            email: "sargas1717@gmail.com",
+            location: "Barcelona, Anzoátegui, VE",
+            linkedin: "https://linkedin.com/in/tu-perfil",
+            github: "https://github.com/tu-usuario",
+            profileImage: "./Public/Perfil.jpeg" 
+          },
+          experience: [
+            {
+              id: 1,
+              role: "Diseñador de Contenido Educativo y Asesor Tecnológico",
+              company: "Adakademy.CA",
+              location: "Lechería, Anzoátegui (Híbrido)",
+              period: "Nov 2023 – Actualidad",
+              description: [
+                "Desarrollo microproyectos de innovación aplicada integrando visión artificial y sistemas IoT (Frontend/Backend) como soluciones experimentales para la educación tecnológica.",
+                "Optimizo procesos internos, control de calidad y gestión de recursos mediante la creación de scripts y la implementación de herramientas de IA.",
+                "Realizo asesoría y evaluación tecnológica, ejecutando pruebas de rendimiento de hardware nuevo para determinar su viabilidad técnica en proyectos específicos.",
+                "Transformo conceptos complejos de tecnologías emergentes en material pedagógico estructurado para diversos públicos, desde niveles básicos hasta profesionales."
+              ],
+              images: [
+                "./Public/Adakademy/5030727312026480702.jpg",
+                "./Public/Adakademy/20250626_160442.jpg",
+                "./Public/Adakademy/5030727312026480707.jpg",
+                "./Public/Adakademy/5042043678973078974.jpg",
+                "./Public/Adakademy/5042043678973078977.jpg"
+              ]
+            },
+            {
+              id: 2,
+              role: "Especialista en Soporte Técnico",
+              company: "CCCT Ven-911 Anzoátegui",
+              location: "Barcelona, Anzoátegui (Presencial)",
+              period: "Dic 2020 – May 2024",
+              description: [
+                "Garanticé la operatividad continua del centro de comando mediante la instalación, configuración y mantenimiento de sistemas de videovigilancia (CCTV) en entornos críticos interiores y exteriores.",
+                "Implementé protocolos de ciberseguridad estrictos para proteger la integridad de los datos y las redes de comunicación de la institución.",
+                "Desplegué y mantuve infraestructuras de telefonía y redes de comunicación ininterrumpida, resolviendo problemas de hardware en tiempo real y bajo presión.",
+                "Ejecuté el montaje e instalación de periféricos de hardware orientados a la operatividad del sistema de atención de emergencias."
+              ],
+              image: "https://images.unsplash.com/photo-1551703599-6b3e8379aa8b?auto=format&fit=crop&w=800&q=80"
+            }
+          ],
+          projects: [
+            {
+              id: 1,
+              title: "Ecosistemas para Competencias de Robótica e IoT",
+              tags: ["IoT", "Visión Artificial", "Hardware", "STEAM"],
+              description: [
+                "Diseño soluciones técnicas integrales que combinan hardware, visión artificial y plataformas digitales para potenciar eventos tecnológicos y proyectos creativos.",
+                "Desarrollo sistemas de gestión para torneos de robótica, optimizando la logística y la experiencia del usuario a través de arquitecturas de software personalizadas.",
+                "Creo plataformas educativas y guías interactivas que integran robótica y realidad aumentada para fomentar el aprendizaje STEAM.",
+                "Implemento nodos IoT independientes y lógica de visión artificial para prototipos funcionales, utilizando herramientas de IA para agilizar el desarrollo."
+              ],
+              image: "./Public/Adakademy/20250626_160442.jpg",
+              link: "#" 
+            },
+            {
+              id: 2,
+              title: "Tendencias Tecnológicas en IA Industrial",
+              tags: ["Visión Artificial", "Industria 4.0", "Benchmark Hardware"],
+              description: [
+                "Presentación de tendencias tecnológicas en universidades sobre tópicos de visión artificial aplicados a la industria.",
+                "Análisis de modelos de Deep Learning aplicados (Segmentación, Detección de anomalías) y su impacto en la productividad académica e industrial.",
+                "Estabilización de requerimientos de hardware para el despliegue de modelos en el borde (Edge Computing) y estaciones de alto rendimiento.",
+                "Evaluación de arquitecturas de computación para ingeniería y robótica STEAM."
+              ],
+              image: "https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=800&q=80",
+              link: "#"
+            }
+          ],
+          education: [
+            {
+              id: 1,
+              degree: "Grado en Ingeniería, Electrical Engineering (Ingeniero Electricista)",
+              institution: "Universidad de Oriente (VE)",
+              period: "Ene 2016 – Abr 2026",
+              details: [
+                "Proyecto de Grado: \"PROPUESTA DE UN SISTEMA AUTOMATIZADO BASADO EN INTERNET DE LAS COSAS E INTELIGENCIA ARTIFICIAL PARA LA DETECCIÓN Y ATENCIÓN DE CAÍDAS EN ADULTOS MAYORES\".",
+                "Investigación: Coautor del artículo científico aprobado para publicación \"DETECCIÓN AUTÓNOMA Y ASISTIDA DE CAÍDAS MEDIANTE COMPUTACIÓN EN EL BORDE: UNA APROXIMACIÓN HÍBRIDA IoT-IA PARA LA SEGURIDAD DEL ADULTO MAYOR\" en la Revista Multidisciplinaria SABER (Universidad de Oriente).",
+                "Enfoque Técnico: Formación sólida en redes, electrónica de potencia y sistemas de comunicación. Fuerte interés y motivación por el aprendizaje, adaptación y desarrollo de tecnologías emergentes desde la perspectiva y el rigor de la ingeniería eléctrica."
+              ]
+            }
+          ],
+          skills: {
+            software: {
+              title: "Desarrollo Asistido por IA",
+              description: "Capacidad para estructurar, desplegar e integrar soluciones web (Python, FastAPI, React, MongoDB, Plotly.js) orquestando y optimizando la lógica de código mediante el uso avanzado de herramientas de Inteligencia Artificial.",
+              tags: ["AI-Assisted Dev", "Python", "FastAPI", "React", "MongoDB", "Plotly.js"]
+            },
+            hardware: {
+              title: "Ingeniería y Hardware",
+              description: "Sólida experiencia técnica orientada a implementaciones físicas y despliegue de infraestructuras.",
+              tags: ["Internet de las Cosas (IoT)", "Visión Artificial", "CCTV", "Redes", "Electrónica de Potencia"]
+            },
+            methodologies: {
+              title: "Herramientas y Gestión",
+              description: "Enfoque integral orientado a la eficiencia, la didáctica y la resolución efectiva de obstáculos.",
+              tags: ["Metodologías Ágiles (SCRUM)", "Automatización y Scripting", "Resolución bajo presión", "Diseño Educativo"]
+            }
+          }
+        };
+
+        function toggleGallery() {
+            const gallery = document.getElementById('adakademy-gallery');
+            const btn = document.getElementById('btn-gallery-text');
+            if (gallery.classList.contains('open')) {
+                gallery.classList.remove('open');
+                btn.innerText = 'Ver Galería de Fotos';
+            } else {
+                gallery.classList.add('open');
+                btn.innerText = 'Cerrar Galería';
+            }
+        }
+
+        function renderPortfolio() {
+            const root = document.getElementById('root');
+            const { personal, experience, projects, education, skills } = PORTFOLIO_DATA;
+
+            root.innerHTML = `
+                <!-- NAVBAR -->
+                <nav class="fixed top-0 w-full glass z-50 border-b border-slate-800/50">
+                  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+                    <div class="font-black text-xl text-cyan-400 tracking-tighter">JGRD<span class="text-slate-100">.dev</span></div>
+                    <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-400">
+                      <a href="#experiencia" class="hover:text-cyan-400 transition-colors">Experiencia</a>
+                      <a href="#proyectos" class="hover:text-cyan-400 transition-colors">Proyectos</a>
+                      <a href="#educacion" class="hover:text-cyan-400 transition-colors">Educación</a>
+                      <a href="#habilidades" class="hover:text-cyan-400 transition-colors">Habilidades</a>
+                    </div>
+                  </div>
+                </nav>
+
+                <!-- HERO SECTION -->
+                <section class="relative pt-32 pb-20 px-6 max-w-6xl mx-auto min-h-[80vh] flex flex-col justify-center">
+                  <div class="reveal">
+                    <div class="flex flex-col md:flex-row items-center gap-12">
+                      <div class="w-56 h-56 md:w-64 md:h-64 rounded-[2.5rem] overflow-hidden border-2 border-cyan-500/20 shadow-2xl flex-shrink-0 relative group">
+                        <img src="${personal.profileImage}" alt="${personal.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent"></div>
+                      </div>
+                      
+                      <div class="text-center md:text-left flex-1">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 tracking-tight leading-tight">
+                          ${personal.name}
+                        </h1>
+                        <div class="flex flex-wrap gap-2 justify-center md:justify-start mb-6 text-cyan-400 font-bold text-sm md:text-base">
+                          ${personal.roles.map((role, idx) => `
+                            <span>${idx > 0 ? '<span class="mx-2 text-slate-700">|</span>' : ''}${role}</span>
+                          `).join('')}
+                        </div>
+                        
+                        <!-- CLASSIC CONTACT BAR -->
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-y-2 gap-x-4 mb-8 text-[13px] font-bold text-slate-400 border-l-0 md:border-l-2 border-cyan-500/30 md:pl-6">
+                            <a href="tel:${personal.phone}" class="hover:text-cyan-400 transition-colors text-slate-300">${personal.phone}</a>
+                            <span class="hidden md:inline text-slate-800">|</span>
+                            <a href="mailto:${personal.email}" class="hover:text-cyan-400 transition-colors text-slate-300">${personal.email}</a>
+                            <span class="hidden md:inline text-slate-800">|</span>
+                            <span class="text-slate-500">${personal.location}</span>
+                            <span class="hidden md:inline text-slate-800">|</span>
+                            <a href="${personal.linkedin}" target="_blank" class="hover:text-cyan-400 transition-colors link-hover">LinkedIn</a>
+                            <span class="hidden md:inline text-slate-800">|</span>
+                            <a href="${personal.github}" target="_blank" class="hover:text-cyan-400 transition-colors link-hover">GitHub</a>
+                        </div>
+
+                        <p class="text-slate-400 text-lg leading-relaxed mb-6 max-w-3xl font-medium">
+                          ${personal.summary}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- EXPERIENCIA SECTION -->
+                <section id="experiencia" class="py-24 bg-slate-900/40 border-y border-slate-900/50">
+                  <div class="max-w-4xl mx-auto px-6">
+                    <div class="reveal">
+                      <h2 class="text-3xl font-bold text-white mb-16 flex items-center gap-4 group">
+                        <span class="w-12 h-1 bg-cyan-500 rounded-full"></span> 
+                        Experiencia Laboral
+                      </h2>
+                      
+                      <div class="relative ml-4 md:ml-6 pl-8 md:pl-12 border-l-2 border-slate-800 space-y-16">
+                        ${experience.map(exp => `
+                          <div class="relative">
+                            <div class="absolute -left-[41px] md:-left-[57px] top-2 flex items-center justify-center w-10 h-10 rounded-xl bg-slate-900 border-2 border-slate-800 text-cyan-400 shadow-xl group-hover:border-cyan-400 transition-colors">
+                              <i data-lucide="briefcase" class="w-5 h-5"></i>
+                            </div>
+                            
+                            <div class="glass p-8 rounded-[2rem] group transition-all">
+                              <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
+                                <div>
+                                  <h3 class="text-2xl font-bold text-white mb-2">${exp.role}</h3>
+                                  <p class="text-cyan-400 font-semibold text-sm uppercase tracking-wider">${exp.company} | ${exp.location}</p>
+                                </div>
+                                <span class="px-4 py-1.5 bg-slate-800/50 rounded-full text-xs font-black text-cyan-500/80 border border-slate-700 h-max">
+                                  ${exp.period}
+                                </span>
+                              </div>
+                              
+                              ${exp.images ? `
+                                <div class="mb-6">
+                                  <button onclick="toggleGallery()" class="flex items-center gap-2 px-4 py-2 bg-cyan-600/10 hover:bg-cyan-600/20 rounded-xl text-xs font-black text-cyan-400 border border-cyan-500/20 transition-all">
+                                    <i data-lucide="images" class="w-4 h-4"></i> <span id="btn-gallery-text">Ver Galería de Fotos</span>
+                                  </button>
+                                  <div id="adakademy-gallery" class="grid grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
+                                    ${exp.images.map(img => `
+                                      <div class="rounded-2xl overflow-hidden h-32 md:h-40 border border-slate-800/50 shadow-lg">
+                                        <img src="${img}" class="w-full h-full object-cover transition-transform hover:scale-110" />
+                                      </div>
+                                    `).join('')}
+                                  </div>
+                                </div>
+                              ` : exp.image ? `
+                                <div class="mb-6 rounded-2xl overflow-hidden h-48 md:h-64 border border-slate-800/50 opacity-80">
+                                  <img src="${exp.image}" class="w-full h-full object-cover" />
+                                </div>
+                              ` : ''}
+                              
+                              <ul class="space-y-4 text-slate-400 font-medium font-inter">
+                                ${exp.description.map(item => `
+                                  <li class="flex gap-4 items-start">
+                                    <span class="mt-1.5 w-1.5 h-1.5 bg-cyan-500 rounded-full flex-shrink-0"></span>
+                                    <span class="text-[15px] leading-relaxed">${item}</span>
+                                  </li>
+                                `).join('')}
+                              </ul>
+                            </div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- PROYECTOS SECTION -->
+                <section id="proyectos" class="py-24 max-w-6xl mx-auto px-6 lg:px-8">
+                  <div class="reveal">
+                    <h2 class="text-3xl font-bold text-white mb-16 flex items-center justify-end gap-4 text-right">
+                      Proyectos Destacados
+                      <span class="w-12 h-1 bg-cyan-500 rounded-full"></span>
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      ${projects.map(project => `
+                        <div class="glass rounded-[2.5rem] overflow-hidden group">
+                          <div class="h-64 overflow-hidden relative">
+                            <img src="${project.image}" alt="${project.title}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
+                          </div>
+                          <div class="p-10">
+                            <div class="flex flex-wrap gap-2 mb-6">
+                              ${project.tags.map(tag => `
+                                <span class="text-[10px] font-black uppercase tracking-widest bg-cyan-500/10 text-cyan-400 px-3 py-1.5 rounded-full border border-cyan-500/10">
+                                  ${tag}
+                                </span>
+                              `).join('')}
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-6">${project.title}</h3>
+                            <ul class="space-y-3 text-sm text-slate-400 font-medium mb-8">
+                              ${project.description.map(desc => `
+                                <li class="flex gap-3 items-start"><span class="text-cyan-500">•</span>${desc}</li>
+                              `).join('')}
+                            </ul>
+                            ${project.link !== "#" ? `
+                              <a href="${project.link}" target="_blank" class="inline-flex items-center gap-2 text-cyan-400 font-bold text-sm tracking-tight hover:text-cyan-300 transition-colors">
+                                Ver Detalles <i data-lucide="external-link" class="w-4 h-4"></i>
+                              </a>
+                            ` : ''}
+                          </div>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                </section>
+
+                <!-- EDUCACIÓN SECTION -->
+                <section id="educacion" class="py-24 bg-slate-950 border-t border-slate-900">
+                  <div class="max-w-5xl mx-auto px-6">
+                    <div class="reveal">
+                        <h2 class="text-3xl font-bold text-white mb-16 flex items-center gap-4">
+                           <span class="w-12 h-1 bg-cyan-500 rounded-full"></span> 
+                           Formación Académica
+                        </h2>
+                        ${education.map(edu => `
+                          <div class="glass p-10 rounded-[2.5rem] relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-bl-[10rem] -z-10 translate-x-32 -translate-y-32"></div>
+                            
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                              <div>
+                                <h3 class="text-3xl font-extrabold text-white leading-tight mb-2">${edu.degree}</h3>
+                                <p class="text-lg text-cyan-400 font-semibold">${edu.institution}</p>
+                              </div>
+                              <span class="px-6 py-2 bg-slate-900 rounded-2xl text-slate-100 font-bold text-sm border border-slate-800 whitespace-nowrap">
+                                ${edu.period}
+                              </span>
+                            </div>
+                            
+                            <div class="space-y-6">
+                              ${edu.details.map(detail => {
+                                const splitIndex = detail.indexOf(":");
+                                if (splitIndex !== -1) {
+                                  const title = detail.substring(0, splitIndex + 1);
+                                  const text = detail.substring(splitIndex + 1);
+                                  return `<div class="p-5 bg-slate-900/50 rounded-2xl border border-slate-800/50"><strong class="text-cyan-400 block mb-2 uppercase text-[11px] tracking-[0.2em]">${title}</strong><p class="text-slate-300 text-sm leading-relaxed font-medium">${text}</p></div>`;
+                                }
+                                return `<p class="text-slate-300 text-sm p-5 bg-slate-900/50 rounded-2xl border border-slate-800/50 font-medium">${detail}</p>`;
+                              }).join('')}
+                            </div>
+                          </div>
+                        `).join('')}
+                    </div>
+                  </div>
+                </section>
+
+                <!-- HABILIDADES SECTION -->
+                <section id="habilidades" class="py-24 max-w-6xl mx-auto px-6 lg:px-8">
+                  <div class="reveal">
+                    <h2 class="text-3xl font-bold text-white mb-16 flex items-center justify-center gap-4">
+                       Competencias Técnicas
+                       <span class="w-12 h-1 bg-cyan-500 rounded-full"></span>
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                      ${Object.entries(skills).map(([key, skill]) => `
+                        <div class="glass p-8 rounded-[2rem] flex flex-col hover:scale-[1.02] transition-transform">
+                          <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 bg-cyan-500/10 rounded-2xl flex items-center justify-center text-cyan-400 border border-cyan-500/20">
+                              <i data-lucide="${key === 'software' ? 'bot' : key === 'hardware' ? 'cpu' : 'wrench'}" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">${skill.title}</h3>
+                          </div>
+                          <p class="text-sm text-slate-400 mb-8 font-medium leading-relaxed flex-grow">
+                            ${skill.description}
+                          </p>
+                          <div class="flex flex-wrap gap-2">
+                            ${skill.tags.map(tag => `
+                              <span class="px-3 py-1.5 bg-slate-900/80 text-slate-300 rounded-xl text-xs font-bold border border-slate-800 hover:border-cyan-500/40 transition-colors">
+                                ${tag}
+                              </span>
+                            `).join('')}
+                          </div>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                </section>
+
+                <!-- FOOTER -->
+                <footer class="py-20 text-center border-t border-slate-900 bg-slate-950">
+                  <div class="font-black text-2xl text-cyan-400 mb-4 tracking-tighter">JGRD<span class="text-slate-100 italic">.dev</span></div>
+                  <p class="text-slate-500 text-sm font-medium">
+                    &copy; ${new Date().getFullYear()} ${personal.name}
+                  </p>
+                </footer>
+            `;
+
+            lucide.createIcons();
+            setupScrollAnimations();
+        }
+
+        function setupScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        document.addEventListener('DOMContentLoaded', renderPortfolio);
+    </script>
+</body>
+</html>
