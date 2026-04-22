@@ -42,12 +42,12 @@
             background: rgba(15, 23, 42, 0.6);
         }
 
-        #adakademy-gallery {
+        .gallery-collapse {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        #adakademy-gallery.open {
+        .gallery-collapse.open {
             max-height: 2000px;
         }
 
@@ -120,7 +120,14 @@
                 "Desplegué y mantuve infraestructuras de telefonía y redes de comunicación ininterrumpida, resolviendo problemas de hardware en tiempo real y bajo presión.",
                 "Ejecuté el montaje e instalación de periféricos de hardware orientados a la operatividad del sistema de atención de emergencias."
               ],
-              image: "https://images.unsplash.com/photo-1551703599-6b3e8379aa8b?auto=format&fit=crop&w=800&q=80"
+              images: [
+                "./Public/ven911/486942834_963537292606964_5316143235408300576_n.jpg",
+                "./Public/ven911/493898102_985633623730664_7949547140393728052_n.jpg",
+                "./Public/ven911/669502684_932746046423558_3587753144536034420_n.jpg",
+                "./Public/ven911/670355124_932746039756892_1310452770526948570_n.jpg",
+                "./Public/ven911/año1-911.JPG",
+                "./Public/ven911/año2-911.JPG"
+              ]
             }
           ],
           projects: [
@@ -151,6 +158,32 @@
               link: "#"
             }
           ],
+          proyectoGrado: {
+            title: "Sistema Automatizado IoT-IA para Detección de Caídas",
+            subtitle: "Propuesta de Proyecto de Grado - Universidad de Oriente",
+            summary: "Sistema híbrido VIGILANTE2 + Asistente_Audio que integra visión artificial (YOLOv8s) con reconocimiento de comandos de voz (Vosk) para la detección y atención autónoma de caídas en adultos mayores. La arquitectura desacoplada basada en MQTT garantiza alertas multicanal (Telegram, WhatsApp, Email) con latencias menores a 15s y una precisión de detección del 87%.",
+            images: [
+              "./Public/Proyecto de Grado/detecciones_agrupadas_originales.jpg",
+              "./Public/Proyecto de Grado/espectrograma.png",
+              "./Public/Proyecto de Grado/forma_de_onda.png",
+              "./Public/Proyecto de Grado/niveles_db_y_snr.png"
+            ],
+            videos: [
+              "./Public/Proyecto de Grado/05_deteccion_final1.mp4"
+            ],
+            tesisUrl: "./Public/Proyecto de Grado/Tesis_version1_web.html"
+          },
+          investigacion: {
+            title: "Publicación Científica",
+            subtitle: "Revista Multidisciplinaria SABER - Universidad de Oriente",
+            summary: "Coautor del artículo \"DETECCIÓN AUTÓNOMA Y ASISTIDA DE CAÍDAS MEDIANTE COMPUTACIÓN EN EL BORDE: UNA APROXIMACIÓN HÍBRIDA IoT-IA PARA LA SEGURIDAD DEL ADULTO MAYOR\". Aprobado para publicación en la Revista SABER (UDO), el trabajo propone una arquitectura Edge Computing para minimizar la latencia en sistemas críticos de seguridad para adultos mayores.",
+            images: [
+              "./Public/Investigación/RS 12-2026 Dr. José Bernardo Peña_page-0001.jpg"
+            ],
+            videos: [
+              "./Public/Investigación/video4994549333157218745.mp4"
+            ]
+          },
           education: [
             {
               id: 1,
@@ -183,9 +216,9 @@
           }
         };
 
-        function toggleGallery() {
-            const gallery = document.getElementById('adakademy-gallery');
-            const btn = document.getElementById('btn-gallery-text');
+        function toggleGallery(galleryId, buttonTextId) {
+            const gallery = document.getElementById(galleryId);
+            const btn = document.getElementById(buttonTextId);
             if (gallery.classList.contains('open')) {
                 gallery.classList.remove('open');
                 btn.innerText = 'Ver Galería de Fotos';
@@ -195,9 +228,40 @@
             }
         }
 
+        function toggleVideoGallery(galleryId, buttonTextId) {
+            const gallery = document.getElementById(galleryId);
+            const btn = document.getElementById(buttonTextId);
+            if (gallery.classList.contains('open')) {
+                gallery.classList.remove('open');
+                btn.innerText = 'Ver Videos';
+                gallery.querySelectorAll('video').forEach(v => v.pause());
+            } else {
+                gallery.classList.add('open');
+                btn.innerText = 'Cerrar Videos';
+            }
+        }
+
+        function openTesis(url) {
+            const modal = document.getElementById('tesis-modal');
+            const iframe = document.getElementById('tesis-iframe');
+            iframe.src = url;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTesis() {
+            const modal = document.getElementById('tesis-modal');
+            const iframe = document.getElementById('tesis-iframe');
+            iframe.src = '';
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
         function renderPortfolio() {
             const root = document.getElementById('root');
-            const { personal, experience, projects, education, skills } = PORTFOLIO_DATA;
+            const { personal, experience, projects, education, skills, proyectoGrado, investigacion } = PORTFOLIO_DATA;
 
             root.innerHTML = `
                 <!-- NAVBAR -->
@@ -208,6 +272,8 @@
                       <a href="#experiencia" class="hover:text-cyan-400 transition-colors">Experiencia</a>
                       <a href="#proyectos" class="hover:text-cyan-400 transition-colors">Proyectos</a>
                       <a href="#educacion" class="hover:text-cyan-400 transition-colors">Educación</a>
+                      <a href="#proyecto-grado" class="hover:text-cyan-400 transition-colors">Proyecto de Grado</a>
+                      <a href="#investigacion" class="hover:text-cyan-400 transition-colors">Investigación</a>
                       <a href="#habilidades" class="hover:text-cyan-400 transition-colors">Habilidades</a>
                     </div>
                   </div>
@@ -282,10 +348,10 @@
                               
                               ${exp.images ? `
                                 <div class="mb-6">
-                                  <button onclick="toggleGallery()" class="flex items-center gap-2 px-4 py-2 bg-cyan-600/10 hover:bg-cyan-600/20 rounded-xl text-xs font-black text-cyan-400 border border-cyan-500/20 transition-all">
-                                    <i data-lucide="images" class="w-4 h-4"></i> <span id="btn-gallery-text">Ver Galería de Fotos</span>
+                                  <button onclick="toggleGallery('gallery-${exp.id}', 'btn-text-${exp.id}')" class="flex items-center gap-2 px-4 py-2 bg-cyan-600/10 hover:bg-cyan-600/20 rounded-xl text-xs font-black text-cyan-400 border border-cyan-500/20 transition-all">
+                                    <i data-lucide="images" class="w-4 h-4"></i> <span id="btn-text-${exp.id}">Ver Galería de Fotos</span>
                                   </button>
-                                  <div id="adakademy-gallery" class="grid grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
+                                  <div id="gallery-${exp.id}" class="gallery-collapse grid grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
                                     ${exp.images.map(img => `
                                       <div class="rounded-2xl overflow-hidden h-32 md:h-40 border border-slate-800/50 shadow-lg">
                                         <img src="${img}" class="w-full h-full object-cover transition-transform hover:scale-110" />
@@ -393,6 +459,116 @@
                     </div>
                   </div>
                 </section>
+
+                <!-- PROYECTO DE GRADO SECTION -->
+                <section id="proyecto-grado" class="py-24 bg-slate-950 border-t border-slate-900">
+                  <div class="max-w-5xl mx-auto px-6">
+                    <div class="reveal">
+                      <h2 class="text-3xl font-bold text-white mb-16 flex items-center gap-4">
+                        <span class="w-12 h-1 bg-cyan-500 rounded-full"></span>
+                        Proyecto de Grado
+                      </h2>
+                      <div class="glass p-10 rounded-[2.5rem] relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-bl-[10rem] -z-10 translate-x-32 -translate-y-32"></div>
+                        <div class="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8">
+                          <div class="flex-1">
+                            <h3 class="text-2xl font-extrabold text-white leading-tight mb-2">${proyectoGrado.title}</h3>
+                            <p class="text-cyan-400 font-semibold text-sm uppercase tracking-wider">${proyectoGrado.subtitle}</p>
+                          </div>
+                          <button onclick="openTesis('${proyectoGrado.tesisUrl}')" class="flex items-center gap-2 px-5 py-2.5 bg-cyan-500/10 hover:bg-cyan-500/25 rounded-xl text-sm font-black text-cyan-400 border border-cyan-500/30 transition-all whitespace-nowrap">
+                            <i data-lucide="book-open" class="w-4 h-4"></i> Ver Tesis Interactiva
+                          </button>
+                        </div>
+                        <p class="text-slate-300 text-base leading-relaxed mb-8 p-5 bg-slate-900/50 rounded-2xl border border-slate-800/50">${proyectoGrado.summary}</p>
+                        <!-- Galería de Imágenes -->
+                        <div class="mb-4">
+                          <button onclick="toggleGallery('pg-img-gallery', 'pg-img-btn')" class="flex items-center gap-2 px-4 py-2 bg-cyan-600/10 hover:bg-cyan-600/20 rounded-xl text-xs font-black text-cyan-400 border border-cyan-500/20 transition-all">
+                            <i data-lucide="images" class="w-4 h-4"></i> <span id="pg-img-btn">Ver Galería de Fotos</span>
+                          </button>
+                          <div id="pg-img-gallery" class="gallery-collapse grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+                            ${proyectoGrado.images.map(img => `
+                              <div class="rounded-2xl overflow-hidden border border-slate-800/50 shadow-lg" style="height:130px">
+                                <img src="${img}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" />
+                              </div>
+                            `).join('')}
+                          </div>
+                        </div>
+                        <!-- Galería de Videos -->
+                        <div class="mt-4">
+                          <button onclick="toggleVideoGallery('pg-vid-gallery', 'pg-vid-btn')" class="flex items-center gap-2 px-4 py-2 bg-violet-600/10 hover:bg-violet-600/20 rounded-xl text-xs font-black text-violet-400 border border-violet-500/20 transition-all">
+                            <i data-lucide="video" class="w-4 h-4"></i> <span id="pg-vid-btn">Ver Videos</span>
+                          </button>
+                          <div id="pg-vid-gallery" class="gallery-collapse grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            ${proyectoGrado.videos.map(v => `
+                              <div class="rounded-2xl overflow-hidden border border-slate-800/50 shadow-lg bg-slate-900">
+                                <video src="${v}" controls class="w-full rounded-2xl" style="max-height:220px;object-fit:cover"></video>
+                              </div>
+                            `).join('')}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- INVESTIGACIÓN SECTION -->
+                <section id="investigacion" class="py-24 bg-slate-900/40 border-t border-slate-900/50">
+                  <div class="max-w-5xl mx-auto px-6">
+                    <div class="reveal">
+                      <h2 class="text-3xl font-bold text-white mb-16 flex items-center gap-4">
+                        <span class="w-12 h-1 bg-cyan-500 rounded-full"></span>
+                        Investigación Publicada
+                      </h2>
+                      <div class="glass p-10 rounded-[2.5rem] relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-bl-[10rem] -z-10 translate-x-32 -translate-y-32"></div>
+                        <div class="mb-6">
+                          <h3 class="text-2xl font-extrabold text-white leading-tight mb-2">${investigacion.title}</h3>
+                          <p class="text-cyan-400 font-semibold text-sm uppercase tracking-wider">${investigacion.subtitle}</p>
+                        </div>
+                        <p class="text-slate-300 text-base leading-relaxed mb-8 p-5 bg-slate-900/50 rounded-2xl border border-slate-800/50">${investigacion.summary}</p>
+                        <!-- Galería de Imágenes -->
+                        <div class="mb-4">
+                          <button onclick="toggleGallery('inv-img-gallery', 'inv-img-btn')" class="flex items-center gap-2 px-4 py-2 bg-cyan-600/10 hover:bg-cyan-600/20 rounded-xl text-xs font-black text-cyan-400 border border-cyan-500/20 transition-all">
+                            <i data-lucide="images" class="w-4 h-4"></i> <span id="inv-img-btn">Ver Galería de Fotos</span>
+                          </button>
+                          <div id="inv-img-gallery" class="gallery-collapse grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                            ${investigacion.images.map(img => `
+                              <div class="rounded-2xl overflow-hidden border border-slate-800/50 shadow-lg" style="height:320px">
+                                <img src="${img}" class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500" />
+                              </div>
+                            `).join('')}
+                          </div>
+                        </div>
+                        <!-- Galería de Videos -->
+                        <div class="mt-4">
+                          <button onclick="toggleVideoGallery('inv-vid-gallery', 'inv-vid-btn')" class="flex items-center gap-2 px-4 py-2 bg-violet-600/10 hover:bg-violet-600/20 rounded-xl text-xs font-black text-violet-400 border border-violet-500/20 transition-all">
+                            <i data-lucide="video" class="w-4 h-4"></i> <span id="inv-vid-btn">Ver Videos</span>
+                          </button>
+                          <div id="inv-vid-gallery" class="gallery-collapse grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            ${investigacion.videos.map(v => `
+                              <div class="rounded-2xl overflow-hidden border border-slate-800/50 shadow-lg bg-slate-900">
+                                <video src="${v}" controls class="w-full rounded-2xl" style="max-height:220px;object-fit:cover"></video>
+                              </div>
+                            `).join('')}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- MODAL TESIS -->
+                <div id="tesis-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                  <div class="w-full max-w-6xl h-[90vh] flex flex-col rounded-[2rem] overflow-hidden border border-slate-700 shadow-2xl">
+                    <div class="flex items-center justify-between px-6 py-3 bg-slate-900 border-b border-slate-800">
+                      <span class="text-white font-bold text-base flex items-center gap-2"><i data-lucide="book-open" class="w-4 h-4 text-cyan-400"></i> Tesis Interactiva — VIGILANTE2 & Asistente_Audio</span>
+                      <button onclick="closeTesis()" class="flex items-center gap-2 px-4 py-2 bg-cyan-500/10 hover:bg-cyan-500/25 rounded-xl text-xs font-black text-cyan-400 border border-cyan-500/30 transition-all">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver al Perfil
+                      </button>
+                    </div>
+                    <iframe id="tesis-iframe" src="" class="flex-1 w-full bg-white border-0"></iframe>
+                  </div>
+                </div>
 
                 <!-- HABILIDADES SECTION -->
                 <section id="habilidades" class="py-24 max-w-6xl mx-auto px-6 lg:px-8">
